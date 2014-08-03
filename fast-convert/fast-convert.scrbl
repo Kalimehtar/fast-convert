@@ -14,5 +14,8 @@ Defines charset table. If charset is not set, then it is taken from the
 @racket[_id] name.
 }
 
+@defproc[(convert-table? [object any/c]) boolean?]{
+Tests whether the @racket[_object] is convert table.}
+
 @defproc[(convert [table convert-table?] [bstr bytes?]) string?]{
 Converts @racket[_bstr] with charset defined by @racket[_table] to string.}
