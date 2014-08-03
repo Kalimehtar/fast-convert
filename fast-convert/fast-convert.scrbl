@@ -1,14 +1,16 @@
 #lang scribble/manual
 
-@(require (for-label racket finalizer))
+@(require (for-label racket fast-convert))
 
-@title{Finalizer: trivial finalization}
+@title{Fast-convert: fast and easy conversion from bytes to string}
 @author{@(author+email "Roman Klochkov" "kalimehtar@mail.ru")}
 
-@(defmodule finalizer)
-This package is based upon idea in 
-@(hyperlink "http://www.gigamonkeys.com/book/practical-an-id3-parser.html" 
-            "Practical Common Lisp").
+@(defmodule fast-convert)
 
-@defproc[(register-finalizer [object any/c] [proc (any/c . -> . any)]) void?]{
-Register finalize racket[_proc], that will be called, when racket[_object] is garbage collected}
+@defthing[(gen-table id [charset string?])]{
+Defines charset table. If charset is not set, then it is taken from the
+@racket[_id] name.
+}
+
+@defproc[(convert [table vector?] [bstr bytes?]) string?]{
+Converts @racket[_bstr] with charset defined by @racket[_table] to string.}
