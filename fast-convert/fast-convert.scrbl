@@ -7,10 +7,12 @@
 
 @(defmodule fast-convert)
 
-@defthing[(gen-table id [charset string?])]{
+@defform/subs[(gen-table id [charset])
+              ()
+              #:contracts ([charset string?])]{
 Defines charset table. If charset is not set, then it is taken from the
 @racket[_id] name.
 }
 
-@defproc[(convert [table vector?] [bstr bytes?]) string?]{
+@defproc[(convert [table convert-table?] [bstr bytes?]) string?]{
 Converts @racket[_bstr] with charset defined by @racket[_table] to string.}
