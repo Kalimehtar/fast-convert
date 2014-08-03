@@ -18,12 +18,9 @@
 
 (define-syntax (gen-table stx)
   (syntax-case stx ()
-    [(_ ID CODEPAGE)
+    [(_ CODEPAGE)
      (with-syntax ([(GEN-CODE ...) (make-codevector (syntax-e #'CODEPAGE))])
-       #'(define ID (vector GEN-CODE ...)))]
-    [(_ ID)
-     (with-syntax ([CODEPAGE (symbol->string (syntax-e #'ID))])
-       #'(gen-table ID CODEPAGE))]))
+       #'(vector GEN-CODE ...))]))
 
 ;;; Should be this, but it is 2 times slower
 #;(define (convert conv datum)
@@ -44,7 +41,7 @@
   (define bstr (list->bytes (for/list ([i 256]) i)))
   (define conv (bytes-open-converter "cp866" "utf-8"))
   (define-values (res1 _ __) (bytes-convert conv bstr))
-  (gen-table cp866)
+  (define cp866 (gen-table "cp866"))
   (check-equal? (bytes->string/utf-8 res1) (convert cp866 bstr))
   (displayln "Check-time bytes-convert:")
   (time (for ([i 100000])

@@ -7,12 +7,11 @@
 
 @(defmodule fast-convert)
 
-@defform/subs[(gen-table id [charset])
+@defform/subs[(gen-table [charset])
               ()
               #:contracts ([charset string?])]{
-Defines charset table. If charset is not set, then it is taken from the
-@racket[_id] name.
-}
+Produces convert table for given charset. Charset name is the same, that may be used for
+@racket[bytes-open-converter].}
 
 @defproc[(convert-table? [object any/c]) boolean?]{
 Tests whether the @racket[_object] is convert table.}
