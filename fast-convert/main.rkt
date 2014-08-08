@@ -26,7 +26,7 @@
 (define-syntax (gen-tables stx)
   (syntax-case stx ()
     [(_ ID ...)
-     (with-syntax ([(CODEPAGE ...) (map symbol->string (syntax->list #'(ID ...)))])
+     (with-syntax ([(CODEPAGE ...) (map symbol->string (syntax->datum #'(ID ...)))])
        #'(begin (define ID (gen-table CODEPAGE)) ...))]))
 
 ;;; Should be this, but it is 2 times slower
