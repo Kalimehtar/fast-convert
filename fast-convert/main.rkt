@@ -1,6 +1,7 @@
 #lang racket/base
 (require (for-syntax racket/base) racket/contract)
 (provide gen-table         
+         gen-tables
          (contract-out [convert (-> vector? bytes? string?)]
                        [convert-table? (-> any/c boolean?)]))
 
@@ -21,6 +22,12 @@
     [(_ CODEPAGE)
      (with-syntax ([(GEN-CODE ...) (make-codevector (syntax-e #'CODEPAGE))])
        #'(vector GEN-CODE ...))]))
+
+(define-syntax (gen-tables stx)
+  (syntax-case stx ()
+    [(_ ID ...)
+     (with-syntax ([(CODEPAGE ...) (map symbol->string (syntax->list #'(ID ...)))])
+       #'(begin (define ID (gen-table CODEPAGE)) ...))]))
 
 ;;; Should be this, but it is 2 times slower
 #;(define (convert conv datum)
