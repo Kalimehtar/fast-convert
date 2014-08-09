@@ -3,9 +3,10 @@
 (provide gen-table         
          gen-tables
          (contract-out [convert (-> vector? bytes? string?)]
-                       [convert-table? (-> any/c boolean?)]))
+                       [convert-table? (-> any/c boolean?)]
+                       [convert-table-name (-> convert-table? string?)]))
 
-(define convert-table? vector?)
+(struct convert-table (table name))
 
 (define-for-syntax (make-codevector codepage)
   (define conv (bytes-open-converter codepage "utf-8"))
@@ -21,7 +22,7 @@
   (syntax-case stx ()
     [(_ CODEPAGE)
      (with-syntax ([(GEN-CODE ...) (make-codevector (syntax-e #'CODEPAGE))])
-       #'(vector GEN-CODE ...))]))
+       #'(convert-table (vector GEN-CODE ...) CODEPAGE))]))
 
 (define-syntax (gen-tables stx)
   (syntax-case stx ()
@@ -29,17 +30,12 @@
      (with-syntax ([(CODEPAGE ...) (map symbol->string (syntax->datum #'(ID ...)))])
        #'(begin (define ID (gen-table CODEPAGE)) ...))]))
 
-;;; Should be this, but it is 2 times slower
-#;(define (convert conv datum)
-    (build-string (bytes-length datum)
-                  (λ (i) (vector-ref conv
-                                     (bytes-ref datum i)))))
-
 (define (convert table datum)
   (define length (bytes-length datum))
   (define res (make-string length))
+  (define vec (convert-table-table table))
   (for ([i (in-range length)])
-    (string-set! res i (vector-ref table 
+    (string-set! res i (vector-ref vec
                                    (bytes-ref datum i))))
   res)
 

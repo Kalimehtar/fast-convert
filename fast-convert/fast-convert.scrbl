@@ -21,8 +21,12 @@ As an example,
 defines convert tables for codepages cp437 and cp866 and binds them to ids @racket[_cp437] 
 and @racket[_cp866].
 
+@defproc[(convert [table convert-table?] [bstr bytes?]) string?]{
+Converts @racket[_bstr] with charset defined by @racket[_table] to string.}
+
 @defproc[(convert-table? [object any/c]) boolean?]{
 Tests whether the @racket[_object] is convert table.}
 
-@defproc[(convert [table convert-table?] [bstr bytes?]) string?]{
-Converts @racket[_bstr] with charset defined by @racket[_table] to string.}
+@defproc[(convert-table-name [table convert-table?]) string?]{
+Returns charset name for @racket[_table].}
+
